@@ -1,7 +1,10 @@
 package id.my.hendisantika.springbootcaffeinecacheexample.config;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.caffeine.CaffeineCacheManager;
+import org.springframework.cache.transaction.TransactionAwareCacheManagerProxy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -27,5 +30,13 @@ public class CacheConfig {
         return Caffeine.newBuilder()
                 .expireAfterWrite(300, TimeUnit.SECONDS)
                 .initialCapacity(10);
+    }
+
+    @Bean
+    public CacheManager cacheManager(Caffeine caffeine) {
+        CaffeineCacheManager caffeineCacheManager = new CaffeineCacheManager();
+        caffeineCacheManager.setCaffeine(caffeine);
+        return new TransactionAwareCacheManagerProxy(caffeineCacheManager);
+        //return caffeineCacheManager;
     }
 }
