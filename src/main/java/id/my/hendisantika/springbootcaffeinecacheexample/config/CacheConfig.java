@@ -1,8 +1,12 @@
 package id.my.hendisantika.springbootcaffeinecacheexample.config;
 
+import com.github.benmanes.caffeine.cache.Caffeine;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by IntelliJ IDEA.
@@ -18,4 +22,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableTransactionManagement
 public class CacheConfig {
+    @Bean
+    public Caffeine<Object, Object> caffeineConfig() {
+        return Caffeine.newBuilder()
+                .expireAfterWrite(300, TimeUnit.SECONDS)
+                .initialCapacity(10);
+    }
 }
