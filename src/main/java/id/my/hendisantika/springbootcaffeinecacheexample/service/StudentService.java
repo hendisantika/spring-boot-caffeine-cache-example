@@ -41,4 +41,9 @@ public class StudentService {
         }
         studentRepository.deleteById(id);
     }
+
+    @CacheEvict(value = "StudentCache", key = "#student.id")
+    public Student save(Student student) {
+        return studentRepository.save(student);
+    }
 }
