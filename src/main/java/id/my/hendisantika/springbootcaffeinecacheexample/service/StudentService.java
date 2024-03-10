@@ -1,7 +1,10 @@
 package id.my.hendisantika.springbootcaffeinecacheexample.service;
 
+import id.my.hendisantika.springbootcaffeinecacheexample.entity.Student;
+import id.my.hendisantika.springbootcaffeinecacheexample.exception.RecordNotFoundException;
 import id.my.hendisantika.springbootcaffeinecacheexample.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,4 +24,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class StudentService {
 
     private final StudentRepository studentRepository;
+
+    @Cacheable("StudentCache")
+    public Student getById(Long id) {
+        return studentRepository.findById(id)
+                .orElseThrow(() -> new RecordNotFoundException("Record not wound with id: " + id));
+    }
 }
